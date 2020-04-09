@@ -35,6 +35,7 @@ class Curses_UI
     @layout = layout
     @timer = timer
     @autosplitter = autosplitter
+    @status = nil
   end
 
   def self.run(*args, **kwargs)
@@ -62,11 +63,18 @@ class Curses_UI
 
       process_input
       autosplit
+
+      @window << @status << "\n" if @status
+      @window.clrtoeol
+      @window.refresh
     end
   end
 
   def process_input
     str = @window.getch.to_s
+    if str != '' then
+      @status = nil
+    end
     case str
     when ' ' then @timer.toggle_pause_or_start
     when 's' then @timer.skip_split
@@ -94,7 +102,6 @@ class Curses_UI
       # TODO: do something with is_loading?
       # TODO: update game_time
     end
-    @window.refresh
   end
 
   def quit
@@ -104,10 +111,15 @@ class Curses_UI
   end
 
   def reset
-    # TODO: detect if beaten personal best
-    if yesno("Your splits (may) have changed. Do you want to save? (Y/N)") then
+    if yesno("Your splits may have changed. Do you want to update them? (Y/N)") then
       @timer.reset(true)
-      # TODO: save
+
+      if yesno("Do you want to save your run? (Y/N)")
+        xml = @timer.save_as_lss
+        filename = @opts.splits || "#{@timer.get_run.extended_file_name(false)}.lss"
+        File.write(filename, xml)
+        @status = "Splits saved as #{filename}."
+      end
     else
       @timer.reset(false)
     end
