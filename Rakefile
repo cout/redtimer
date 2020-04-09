@@ -1,7 +1,17 @@
 require 'open3'
 
 task :record do
-  cmd = "bundle exec ruby bin/redtimer.rb \\\n--game 'Lucky Charms' \\\n--category '1983 Edition' \\\n-s '\xF0\x9F\x92\x97 Pink Hearts,\xf0\x9f\x8c\x99 Yellow Moons,\xe2\xad\x90 Orange Stars,\xf0\x9f\x8d\x80 Green Clovers,\xf0\x9f\xa7\xb2 Purple Horseshoes' --segment-times 2.75,2.75,2.75,2.75,2.75 --best-segment-times 2.5,2.5,2.5,2.5,2.5"
+  cmd = "bundle exec ruby bin/redtimer.rb \\\n" +
+        "--game 'Lucky Charms' \\\n" +
+        "--category '1983 Edition' \\\n" +
+        "-s '\xF0\x9F\x92\x97 Pink Hearts," +
+            "\xf0\x9f\x8c\x99 Yellow Moons," +
+            "\xe2\xad\x90 Orange Stars," +
+            "\xf0\x9f\x8d\x80 Green Clovers," +
+            "\xf0\x9f\x94\xb7 Blue Diamonds," +
+            "\xf0\x9f\xa7\xb2 Purple Horseshoes' " +
+        "--segment-times 2.5,2.5,2.5,2.5,2.5,2.5 \\\n" +
+        "--best-segment-times 2.25,2.25,2.25,2.25,2.25,2.25"
 
   Open3.pipeline_w("termtosvg docs/redtimer.svg -g 44x25 -D 4000 -c \"#{cmd}\"") do |stdin, th|
     # Start the timer
@@ -10,8 +20,8 @@ task :record do
     stdin.flush
 
     # Split
-    6.times do
-      sleep 2 + rand
+    7.times do
+      sleep 1.85 + rand
       stdin << "\n"
       stdin.flush
     end
