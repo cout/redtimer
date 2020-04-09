@@ -1,0 +1,8 @@
+*~
+.*.swp
+.bundle/
+splits/
+layouts/
+vendor/
+LiveSplitCore.rb
+liblivesplit_core.so

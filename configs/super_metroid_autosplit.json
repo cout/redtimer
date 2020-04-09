@@ -1,0 +1,27 @@
+{
+  "autosplitter_script": "autosplitters/super_metroid_autosplitter.rb",
+  "autosplitter_events": [
+    "firstMissile",
+    "earlySupers",
+    "firstPowerBomb",
+    "suitUpgrades",
+    "beamUpgrades",
+    "bootUpgrades",
+    "terminatorETank",
+    "morphBall",
+    "bombs",
+    "grapple",
+    "ceresEscape",
+    "mainHall",
+    "statues",
+    "bombTorizo",
+    "sporeSpawn",
+    "crocomire",
+    "botwoon",
+    "phantoon",
+    "draygon",
+    "ridley",
+    "mb3",
+    "rtaFinish"
+  ]
+}
