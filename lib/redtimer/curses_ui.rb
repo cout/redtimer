@@ -82,6 +82,7 @@ class Curses_UI
     when 'p' then @timer.pause
     when 'r' then reset
     when 'q' then quit
+    when 'S' then save
     when '10' then @timer.split
     end
   end
@@ -113,15 +114,18 @@ class Curses_UI
   def reset
     if yesno("Your splits may have changed. Do you want to update them? (Y/N)") then
       @timer.reset(true)
-
-      if yesno("Do you want to save your run? (Y/N)")
-        xml = @timer.save_as_lss
-        filename = @opts.splits || "#{@timer.get_run.extended_file_name(false)}.lss"
-        File.write(filename, xml)
-        @status = "Splits saved as #{filename}."
-      end
+      save
     else
       @timer.reset(false)
+    end
+  end
+
+  def save
+    if yesno("Do you want to save your run? (Y/N)")
+      xml = @timer.save_as_lss
+      filename = @opts.splits || "#{@timer.get_run.extended_file_name(false)}.lss"
+      File.write(filename, xml)
+      @status = "Splits saved as #{filename}."
     end
   end
 
