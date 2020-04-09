@@ -4,6 +4,9 @@ require 'sm_ram_map/room_ids'
 
 require 'set'
 
+# An autosplitter for Super Metroid.  It is based UNHchabo's ASL-based
+# autosplitter for livesplit
+# (https://github.com/UNHchabo/AutoSplitters/tree/master/SuperMetroid).
 class Super_Metroid_Autosplitter < Autosplitter
   UPGRADE_EVENTS = Set[
     :ammoPickups, :firstMissile, :allMissiles, :firstSuper,
