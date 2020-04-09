@@ -21,7 +21,7 @@ COLORS = {
 }
 
 class Curses_UI
-  def initialize(screen:, opts:, run:, layout:, timer:, autosplitter:)
+  def initialize(screen:, opts:, layout:, timer:, autosplitter:)
     @screen = screen
     @opts = opts
     @window = Curses::Window.new(0, 0, 1, 2)
@@ -32,7 +32,6 @@ class Curses_UI
     @renderer = Curses_Renderer.new(@opts, @window, @colors)
 
     @opts = opts
-    @run = run
     @layout = layout
     @timer = timer
     @autosplitter = autosplitter

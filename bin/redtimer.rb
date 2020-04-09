@@ -107,7 +107,6 @@ if __FILE__ == $0 then
 
   Redtimer::Curses_UI.run(
       opts: opts,
-      run: run,
       layout: layout,
       timer: timer,
       autosplitter: autosplitter)
