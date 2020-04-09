@@ -25,6 +25,8 @@ def create_run(opts)
     opts.segments.each { |name| run.push_segment(LiveSplitCore::Segment.create(name)) }
   end
 
+  raise "A run must have at least one segment" unless run.len > 0
+
   return run
 end
 
