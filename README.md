@@ -64,14 +64,23 @@ The config format is a json object with the above arguments as keys.
 See [super_metroid_autosplit.json](configs/super_metroid_autosplit.json)
 for an example.
 
-Redtimer does support autosplitter scripts written in ruby.  They are
-intended to be similar to autosplitter functionality currently being
-implemented for Livesplit One.  Inherit from the
-`Redtimer::Autosplitter` class and implement the required methods.  See
-[super_metroid_autosplitter.rb](autosplitters/super_metroid_autosplitter.rb)
-for an example.
-
 Redtimer can use any font supported by Toilet.  Run
 `demos/toilet_demo.rb` to see examples.
 
 Loading layout files does not yet work.
+
+Autosplitters
+-------------
+
+Autosplitters for redtimer are written in ruby and are modeled after the
+autosplitters in (livesplit-core)[https://github.com/CryZe/livesplit-core/tree/auto-splitting).
+The intent is that once autosplitters are part of the mainline
+livesplit-core, it will be easy to port them to wasm using
+[wruby](https://github.com/pannous/wruby) or
+[rlang](https://github.com/ljulliar/rlang).
+
+To write an autosplitter for redtimer, create a class that inherits from
+`Redtimer::Autosplitter` and implement the appropriate methods.
+
+See [super_metroid_autosplitter.rb](autosplitters/super_metroid_autosplitter.rb)
+for an example.
