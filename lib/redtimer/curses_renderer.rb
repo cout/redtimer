@@ -109,13 +109,6 @@ class Curses_Renderer
     @window.refresh
   end
 
-  def render_ansi(line)
-    @window.clrtoeol
-    puts "\r#{' ' * @window.begx}#{line}\r"
-    @window.move_relative(0, 1) # TODO: this doesn't do what I thought it does!
-    @window.refresh
-  end
-
   def render_state(state)
     state.each do |type, component|
       render_component(type, component)
