@@ -87,7 +87,6 @@ class Curses_Renderer
       }
       @window.clrtoeol
       @window << "\n"
-      # render_ansi(line)
     end
   end
 
