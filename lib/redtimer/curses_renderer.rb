@@ -5,16 +5,16 @@ module Redtimer
 
 class Curses_Renderer
   COLORS = {
-    'Default'           =>   [   7, 0 ],
-    'AheadGainingTime'  => [ [  40, 0 ], [  41, 0 ], [  42, 0 ] ],
-    'AheadLosingTime'   => [ [ 148, 0 ], [ 149, 0 ], [ 150, 0 ] ],
-    'BehindGainingTime' => [ [ 204, 0 ], [ 205, 0 ], [ 206, 0 ] ],
-    'BehindLosingTime'  => [ [ 196, 0 ], [ 197, 0 ], [ 198, 0 ] ],
-    'BestSegment'       =>   [ 214, 0 ],
-    'NotRunning'        => [ [  40, 0 ], [  41, 0 ], [  42, 0 ] ],
-    'Paused'            => [ [  40, 0 ], [  41, 0 ], [  42, 0 ] ],
-    'PersonalBest'      => [ [  81, 0 ], [  80, 0 ], [  79, 0 ] ],
-    'CurrentSplit'      =>   [   0, 1 ]
+    'Default'           =>   [   7,  0 ],
+    'AheadGainingTime'  => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
+    'AheadLosingTime'   => [ [ 148,  0 ], [ 149, 0 ], [ 150, 0 ] ],
+    'BehindGainingTime' => [ [ 204,  0 ], [ 205, 0 ], [ 206, 0 ] ],
+    'BehindLosingTime'  => [ [ 196,  0 ], [ 197, 0 ], [ 198, 0 ] ],
+    'BestSegment'       =>   [ 214,  0 ],
+    'NotRunning'        => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
+    'Paused'            => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
+    'PersonalBest'      => [ [  81,  0 ], [  80, 0 ], [  79, 0 ] ],
+    'CurrentSplit'      =>   [   7, 25 ]
   }
 
   attr_reader :window
@@ -56,30 +56,53 @@ class Curses_Renderer
   end
 
   def render_with_semantic_color(name)
-    color = @colors[name]
-    raise "No color defined for #{name}" if not color
+    color = semantic_color(name)
     color_pair = Curses.color_pair(color)
     @window.attron(color_pair) {
       yield
     }
   end
 
+  def semantic_color(name)
+    color = @colors[name]
+    raise "No color defined for #{name}" if not color
+    return color
+  end
+
+  def column_color(segment, column)
+    if segment.current_split? then
+      return semantic_color('CurrentSplit')
+    else
+      return semantic_color(column.semantic_color)
+    end
+  end
+
   def render_segment(name, segment)
     name = '.' if name == ''
     name = name.force_encoding(Encoding::UTF_8)
-    segment_width = @width - segment.length * 8
-    num_spaces = [ 0, segment_width - name.length ].max
-    @window << name << ' ' * num_spaces
-    x = segment_width
+    name_width = @width - segment.length * 8
+
+    color = segment.current_split? \
+      ? semantic_color('CurrentSplit') \
+      : semantic_color('Default')
+    bold = segment.current_split? ? Curses::A_BOLD : 0
+    @window.attron(Curses.color_pair(color) | bold) {
+      num_spaces = [ 0, name_width - name.length ].max
+      @window << name << ' ' * num_spaces
+    }
+
+    x = name_width
     segment.each_column do |column|
       @window.setpos(@window.cury, x)
       value = column.value.to_s.force_encoding(Encoding::UTF_8)
       value = '-' if value == ''
-      render_with_semantic_color(column.semantic_color) {
+      color = column_color(segment, column)
+      @window.attron(Curses.color_pair(color) | bold) {
         @window << value.rjust(8)
       }
       x += 8
     end
+
     @window.clrtoeol
     @window << "\n"
   end
