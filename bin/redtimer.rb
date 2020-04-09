@@ -27,6 +27,24 @@ def create_run(opts)
 
   raise "A run must have at least one segment" unless run.len > 0
 
+  if opts.segment_times then
+    editor = LiveSplitCore::RunEditor.create(run)
+    opts.segment_times.each_with_index { |time, idx|
+      editor.select_only(idx)
+      editor.active_parse_and_set_segment_time(time)
+    }
+    run = editor.close
+  end
+
+  if opts.best_segment_times then
+    editor = LiveSplitCore::RunEditor.create(run)
+    opts.best_segment_times.each_with_index { |time, idx|
+      editor.select_only(idx)
+      editor.active_parse_and_set_best_segment_time(time)
+    }
+    run = editor.close
+  end
+
   return run
 end
 
@@ -52,6 +70,8 @@ if __FILE__ == $0 then
   op.on('-s', '--segments=SEGMENTS', Array) { |a| opts.segments = a }
   op.on('--game=NAME') { |a| opts.game = a }
   op.on('--category=NAME') { |a| opts.category = a }
+  op.on('--segment-times=TIMES', Array) { |a| opts.segment_times = a }
+  op.on('--best-segment-times=TIMES', Array) { |a| opts.best_segment_times = a }
   op.on('--timer-font=FONT') { |a| opts.timer_font = a }
   op.on('--autosplitter=SCRIPT') { |a| opts.autosplitter_script = a }
   op.on('--autosplitter-events=EVENTS', Array) { |a| opts.autosplitter_events = a }

@@ -56,7 +56,8 @@ class Curses_Renderer
       name = '.' if name == ''
       name = name.force_encoding(Encoding::UTF_8)
       segment_width = @width - segment.length * 8
-      @window << name << ' ' * (segment_width - name.length)
+      num_spaces = [ 0, segment_width - name.length ].max
+      @window << name << ' ' * num_spaces
       x = segment_width
       segment.each_column do |column|
         @window.setpos(@window.cury, x)
