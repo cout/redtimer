@@ -73,7 +73,7 @@ Autosplitters
 -------------
 
 Autosplitters for redtimer are written in ruby and are modeled after the
-autosplitters in (livesplit-core)[https://github.com/CryZe/livesplit-core/tree/auto-splitting).
+autosplitters in [livesplit-core](https://github.com/CryZe/livesplit-core/tree/auto-splitting).
 The intent is that once autosplitters are part of the mainline
 livesplit-core, it will be easy to port them to wasm using
 [wruby](https://github.com/pannous/wruby) or
