@@ -82,5 +82,15 @@ livesplit-core, it will be easy to port them to wasm using
 To write an autosplitter for redtimer, create a class that inherits from
 `Redtimer::Autosplitter` and implement the appropriate methods.
 
+The mechanism provided for reading from game memory is Retroarch's
+Network control interface.  This protocol allows an application to read
+from game memory, without having to know where the process stores game
+RAM.  This allows the autosplitter to work without modification across
+different versions of retroarch.
+
+Network control is disable by default in Retroarch.  To enable it, go to
+Settings, then Network, and enable Network Commands.  The port must be
+the default port (55354).
+
 See [super_metroid_autosplitter.rb](autosplitters/super_metroid_autosplitter.rb)
 for an example.
