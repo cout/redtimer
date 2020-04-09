@@ -4,6 +4,18 @@ require 'curses'
 module Redtimer
 
 class Curses_Renderer
+  COLORS = {
+    'Default'           =>   [ 7,   0 ],
+    'AheadGainingTime'  => [ [ 40,  0 ], [ 41,  0 ], [ 42,  0 ] ],
+    'AheadLosingTime'   => [ [ 148, 0 ], [ 149, 0 ], [ 150, 0 ] ],
+    'BehindGainingTime' => [ [ 204, 0 ], [ 205, 0 ], [ 206, 0 ] ],
+    'BehindLosingTime'  => [ [ 196, 0 ], [ 197, 0 ], [ 198, 0 ] ],
+    'BestSegment'       =>   [ 214, 0 ],
+    'NotRunning'        => [ [ 40,  0 ], [ 41,  0 ], [ 42,  0 ] ],
+    'Paused'            => [ [ 40,  0 ], [ 41,  0 ], [ 42,  0 ] ],
+    'PersonalBest'      => [ [ 81,  0 ], [ 80,  0 ], [ 79,  0 ] ],
+  }
+
   attr_reader :window
 
   def initialize(opts, window, colors)
