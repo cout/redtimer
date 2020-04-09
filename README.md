@@ -20,6 +20,7 @@ Requirements
 * Ncurses
 * Toilet
 * Livesplit-core
+* A terminal that supports 256 colors
 
 Build instructions
 ------------------
