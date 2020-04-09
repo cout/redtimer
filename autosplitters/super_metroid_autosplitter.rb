@@ -1,4 +1,4 @@
-require 'netplay/netplay_socket'
+require 'retroarch/network_command_socket'
 require 'sm_ram_map/state'
 require 'sm_ram_map/room_ids'
 
@@ -44,7 +44,7 @@ class Super_Metroid_Autosplitter < Autosplitter
   def initialize
     super
     # TODO: auto-reconnect socket
-    @sock = NetplaySocket.new
+    @sock = Retroarch::NetworkCommandSocket.new
     @state = nil
     @old_state = nil
     @log = [ ]

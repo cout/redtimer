@@ -1,14 +1,14 @@
 $: << './lib'
 
 require 'sm_ram_map/state'
-require 'netplay/netplay_socket'
+require 'retroarch/network_command_socket'
 
 require 'ostruct'
 
 if __FILE__ == $0 then
   old_state = State.new
 
-  sock = NetplaySocket.new
+  sock = Retroarch::NetworkCommandSocket.new
   while true do
     state = State.read_from(sock)
 
