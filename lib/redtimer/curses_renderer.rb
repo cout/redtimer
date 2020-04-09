@@ -14,6 +14,7 @@ class Curses_Renderer
     'NotRunning'        => [ [  40, 0 ], [  41, 0 ], [  42, 0 ] ],
     'Paused'            => [ [  40, 0 ], [  41, 0 ], [  42, 0 ] ],
     'PersonalBest'      => [ [  81, 0 ], [  80, 0 ], [  79, 0 ] ],
+    'CurrentSplit'      =>   [   0, 1 ]
   }
 
   attr_reader :window
@@ -63,25 +64,29 @@ class Curses_Renderer
     }
   end
 
+  def render_segment(name, segment)
+    name = '.' if name == ''
+    name = name.force_encoding(Encoding::UTF_8)
+    segment_width = @width - segment.length * 8
+    num_spaces = [ 0, segment_width - name.length ].max
+    @window << name << ' ' * num_spaces
+    x = segment_width
+    segment.each_column do |column|
+      @window.setpos(@window.cury, x)
+      value = column.value.to_s.force_encoding(Encoding::UTF_8)
+      value = '-' if value == ''
+      render_with_semantic_color(column.semantic_color) {
+        @window << value.rjust(8)
+      }
+      x += 8
+    end
+    @window.clrtoeol
+    @window << "\n"
+  end
+
   def render_splits(component)
     component.each_segment do |name, segment|
-      name = '.' if name == ''
-      name = name.force_encoding(Encoding::UTF_8)
-      segment_width = @width - segment.length * 8
-      num_spaces = [ 0, segment_width - name.length ].max
-      @window << name << ' ' * num_spaces
-      x = segment_width
-      segment.each_column do |column|
-        @window.setpos(@window.cury, x)
-        render_with_semantic_color(column.semantic_color) {
-          value = column.value.to_s.force_encoding(Encoding::UTF_8)
-          value = '-' if value == ''
-          @window << value.rjust(8)
-          x += 8
-        }
-      end
-      @window.clrtoeol
-      @window << "\n"
+      render_segment(name, segment)
     end
   end
 
