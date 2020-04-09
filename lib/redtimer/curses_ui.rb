@@ -23,6 +23,7 @@ COLORS = {
 class Curses_UI
   def initialize(screen:, opts:, run:, layout:, timer:, autosplitter:)
     @screen = screen
+    @opts = opts
     @window = Curses::Window.new(0, 0, 1, 2)
     @window.clear
     @window.timeout = 100
@@ -58,7 +59,7 @@ class Curses_UI
     loop do
       @window.setpos(0, 0)
       state = @layout.state(@timer)
-      renderer.render_state(state)
+      @renderer.render_state(state)
 
       process_input
       autosplit
