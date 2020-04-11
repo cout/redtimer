@@ -48,6 +48,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     @state = nil
     @old_state = nil
     @log = [ ]
+    @splits = [ ]
   end
 
   def update
@@ -162,6 +163,8 @@ class Super_Metroid_Autosplitter < Autosplitter
     if event_names.size > 0 then
       @last_events = event_names
       @log << event_names
+    else
+      @last_events = nil
     end
 
     return event_names
@@ -169,6 +172,12 @@ class Super_Metroid_Autosplitter < Autosplitter
 
   def current_events
     @last_events || [ ]
+  end
+
+  def should_split
+    result = super
+    @splits << @last_events if result
+    return result
   end
 
   def debug
@@ -179,9 +188,13 @@ class Super_Metroid_Autosplitter < Autosplitter
     s << "Most recent changes: #{@last_changes.to_h}\n"
     s << "Most recent events: #{@last_events}\n"
     s << "\n"
-    s << "Last 20 events:\n"
-    recent_events = @log.slice(-([@log.size, 20].min)..-1)
+    s << "Last 10 events:\n"
+    recent_events = @log.slice(-([@log.size, 10].min)..-1)
     recent_events.each { |l| s << "  #{l}\n" }
+    s << "\n"
+    s << "Last 10 splits:\n"
+    recent_splits = @splits.slice(-([@splits.size, 10].min)..-1)
+    @splits.each { |split| s << "  #{split}\n" }
     return s
   end
 end
