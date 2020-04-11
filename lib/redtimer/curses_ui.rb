@@ -118,7 +118,9 @@ class Curses_UI
   end
 
   def yesno(text)
-    @window << "\n" << text
+    @window.attron(Curses::A_BOLD) {
+      @window << "\n" << text
+    }
     @window.refresh
     begin
       loop do
