@@ -95,3 +95,18 @@ the default port (55354).
 
 See [super_metroid_autosplitter.rb](autosplitters/super_metroid_autosplitter.rb)
 for an example.
+
+Other terminal-based timers
+---------------------------
+
+Other great timers for your terminal:
+
+* [livesplit-one-terminal](https://github.com/CryZe/livesplit-one-terminal) -
+  a very simple terminal-based timer built on livesplit-core, written in
+  Rust
+* [pyvesplit-terminal](https://github.com/stevensmedia/pyvesplit-terminal) -
+  a port of livesplit-one-terminal to python.  Uses pyfiglet to draw a
+  big timer.
+* [flitter](https://github.com/alexozer/flitter) - a clone of livesplit
+  written in ocaml.  Uses custom code to draw a big timer, and some nice
+  eye candy.
