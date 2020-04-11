@@ -70,6 +70,23 @@ Redtimer can use any font supported by Toilet.  Run
 
 Loading layout files does not yet work.
 
+Key bindings
+------------
+
+Key bindings are not (yet) configurable.
+
+| Key     | Action                   |
+| ------- | ------------------------ |
+| `Space` | Toggle pause or start    |
+| `Enter` | Split                    |
+| `s`     | Skip split               |
+| `u`     | Undo split               |
+| `p`     | Timer pause (not toggle) |
+| `r`     | Reset timer              |
+| `q`     | Quit                     |
+| `S`     | Save splits              |
+
+
 Autosplitters
 -------------
 
