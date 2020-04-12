@@ -71,8 +71,20 @@ class Curses_UI
     when 'r' then reset
     when 'q' then quit
     when 'S' then save
+    when '[' then previous_comparison
+    when ']' then next_comparison
     when '10' then @timer.split
     end
+  end
+
+  def previous_comparison
+    @timer.switch_to_previous_comparison
+    @status = "Comparing against #{@timer.current_comparison}"
+  end
+
+  def next_comparison
+    @timer.switch_to_next_comparison
+    @status = "Comparing against #{@timer.current_comparison}"
   end
 
   def autosplit

@@ -85,7 +85,8 @@ Key bindings are not (yet) configurable.
 | `r`     | Reset timer              |
 | `q`     | Quit                     |
 | `S`     | Save splits              |
-
+| `[`     | Previous comparison      |
+| `]`     | Next comparison          |
 
 Autosplitters
 -------------
