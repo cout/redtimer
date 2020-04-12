@@ -55,6 +55,7 @@ def create_layout(opts)
     raise "Unable to parse layout file `#{opts.layout}'" if not layout
   else
     layout = LiveSplitCore::Layout.default_layout
+    layout.push(LiveSplitCore::SumOfBestComponent.create.into_generic)
   end
 
   return layout
