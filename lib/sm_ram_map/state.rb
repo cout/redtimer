@@ -58,6 +58,7 @@ class State < OpenStruct
 
     bosses = [ ]
     bosses << :bomb_torizo              if bosses_bitmask & 0x00000000004 != 0
+    bosses << :kraid                    if bosses_bitmask & 0x00000000100 != 0
     bosses << :spore_spawn              if bosses_bitmask & 0x00000000200 != 0
     bosses << :ridley                   if bosses_bitmask & 0x00000010000 != 0
     bosses << :crocomire                if bosses_bitmask & 0x00000020000 != 0
@@ -68,7 +69,7 @@ class State < OpenStruct
 
     return self.new(
       room_id: room_id,
-      room_name: ROOM_IDS[room_id] || ('%04x' % room_id),
+      room_name: ROOM_IDS[room_id] || ('0x%04x' % room_id),
       game_state_value: game_state_value,
       game_state: GAME_STATES[game_state_value] || ('%02x' % game_state_value),
       collected_items_bitmask: collected_items_bitmask,

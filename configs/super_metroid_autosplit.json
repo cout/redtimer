@@ -14,16 +14,11 @@
     "ceresEscape",
     "mainHall",
     "statues",
-    "bombTorizo",
-    "sporeSpawn",
-    "crocomire",
-    "botwoon",
-    "phantoon",
-    "draygon",
-    "ridley",
+    "anyMinibossDead",
+    "anyBossDead",
     "mb3",
     "rtaFinish",
-    "kraidRoom",
+    "kraidFight",
     "charge"
   ]
 }

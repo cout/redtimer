@@ -35,7 +35,11 @@ class Super_Metroid_Autosplitter < Autosplitter
   ]
 
   BOSS_EVENTS = [
-    :sporeSpawn, :crocomire, :botwoon, :phantoon, :draygon, :ridley,
+    :sporeSpawnFight, :crocomireFight, :botwoonFight, :kraidFight,
+    :phantoonFight, :draygonFight, :ridleyFight,
+    :sporeSpawnDead, :crocomireDead, :botwoonDead, :kraidDead,
+    :phantoonDead, :draygonDead, :ridleyDead,
+    :anyMinibossFight, :anyMinibossDead, :anyBossFight, :anyBossDead,
     :mb1, :mb2, :mb3
   ]
 
@@ -128,17 +132,33 @@ class Super_Metroid_Autosplitter < Autosplitter
     }
 
     boss_events = {
-      bombTorizo: new_bosses.include?(:bomb_torizo),
-      sporeSpawn: new_bosses.include?(:spore_spawn),
-      ridley: new_bosses.include?(:ridley),
-      crocomire: new_bosses.include?(:crocomire),
-      phantoon: new_bosses.include?(:phantoon),
-      draygon: new_bosses.include?(:draygon),
-      botwoon: new_bosses.include?(:botwoon),
-      mb1: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
-      mb2: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
-      mb3: new_bosses.include?(:mother_brain),
+      bombTorizoFight: @old_state.room_name != :bombTorizoRoom && @state.room_name == :bombTorizoRoom && !@state.bosses.include?(:bomb_torizo),
+      sporeSpawnFight: @old_state.room_name != :sporeSpawnRoom && @state.room_name == :sporeSpawnRoom && !@state.bosses.include?(:bomb_torizo),
+      kraidFight: @old_state.room_name != :kraidRoom && @state.room_name == :kraidRoom && !@state.bosses.include?(:kraid),
+      phantoonFight: @old_state.room_name != :phantoonRoom && @state.room_name == :phantoonRoom && !@state.bosses.include?(:phantoon),
+      botwoonFight: @old_state.room_name != :botwoonRoom && @state.room_name == :botwoonRoom && !@state.bosses.include?(:botwoon),
+      draygonFight: @old_state.room_name != :draygonRoom && @state.room_name == :draygonRoom && !@state.bosses.include?(:draygon),
+      crocomireFight: @old_state.room_name != :crocomireRoom && @state.room_name == :crocomireRoom && !@state.bosses.include?(:crocomire),
+      ridleyFight: @old_state.room_name != :ridleyRoom && @state.room_name == :ridleyRoom && !@state.bosses.include?(:ridley),
+
+      bombTorizoDead: new_bosses.include?(:bomb_torizo),
+      sporeSpawnDead: new_bosses.include?(:spore_spawn),
+      ridleyDead: new_bosses.include?(:ridley),
+      crocomireDead: new_bosses.include?(:crocomire),
+      phantoonDead: new_bosses.include?(:phantoon),
+      draygonDead: new_bosses.include?(:draygon),
+      botwoonDead: new_bosses.include?(:botwoon),
+      mb1Dead: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
+      mb2Dead: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
+      mb3Dead: new_bosses.include?(:mother_brain),
     }
+
+    boss_events.update(
+      anyMinibossFight: boss_events[:bombTorizoFight] || boss_events[:sporeSpawnFight] || boss_events[:crocomireFight] || boss_events[:botwoonFight],
+      anyBossFight: boss_events[:ridleyFight] || boss_events[:kraidFight] || boss_events[:phantoonFight] || boss_events[:draygonFight],
+      anyMinibossDead: boss_events[:bombTorizoDead] || boss_events[:sporeSpawnDead] || boss_events[:crocomireDead] || boss_events[:botwoonDead],
+      anyBossDead: boss_events[:ridleyDead] || boss_events[:kraidDead] || boss_events[:phantoonDead] || boss_events[:draygonDead],
+    )
 
     events = { }
     events.update(upgrade_events)
