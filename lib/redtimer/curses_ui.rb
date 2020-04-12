@@ -50,9 +50,9 @@ class Curses_UI
       @renderer.render_state(state)
 
       process_input
+      show_status
       autosplit
 
-      @window << @status << "\n" if @status
       @window.clrtoeol
       @window.refresh
     end
@@ -75,6 +75,10 @@ class Curses_UI
     when ']' then next_comparison
     when '10' then @timer.split
     end
+  end
+
+  def show_status
+    @window << @status << "\n" if @status
   end
 
   def previous_comparison
