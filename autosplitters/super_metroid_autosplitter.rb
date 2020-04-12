@@ -9,10 +9,10 @@ require 'set'
 # (https://github.com/UNHchabo/AutoSplitters/tree/master/SuperMetroid).
 class Super_Metroid_Autosplitter < Autosplitter
   UPGRADE_EVENTS = Set[
-    :ammoPickups, :firstMissile, :allMissiles, :firstSuper,
+    :allAmmoPickups, :firstMissile, :allMissiles, :firstSuper,
     :allSupers, :firstPowerBomb, :allPowerBombs, :suitUpgrades,
-    :beamUpgrades, :charge, :spazer, :wave, :ice, :plasma,
-    :bootUpgrades, :hiJump, :spaceJump, :speedBooster, :energyUpgrades,
+    :anyBeamUpgrade, :charge, :spazer, :wave, :ice, :plasma,
+    :anyBootUpgrade, :hiJump, :spaceJump, :speedBooster, :allEnergyUpgrades,
     :firstETank, :allETanks, :reserveTanks, :morphBall, :bombs,
     :springBall, :screwAttack, :grapple, :xray
   ]
@@ -35,12 +35,12 @@ class Super_Metroid_Autosplitter < Autosplitter
   ]
 
   BOSS_EVENTS = [
-    :sporeSpawnFight, :crocomireFight, :botwoonFight, :kraidFight,
-    :phantoonFight, :draygonFight, :ridleyFight,
-    :sporeSpawnDead, :crocomireDead, :botwoonDead, :kraidDead,
-    :phantoonDead, :draygonDead, :ridleyDead,
+    :bombTorizoFight, :sporeSpawnFight, :crocomireFight, :botwoonFight,
+    :kraidFight, :phantoonFight, :draygonFight, :ridleyFight,
+    :bombTorizoDead, :sporeSpawnDead, :crocomireDead, :botwoonDead,
+    :kraidDead, :phantoonDead, :draygonDead, :ridleyDead,
     :anyMinibossFight, :anyMinibossDead, :anyBossFight, :anyBossDead,
-    :mb1, :mb2, :mb3
+    :mb1End, :mb2End, :mb3End, :motherBrainDead
   ]
 
   EVENTS = UPGRADE_EVENTS + ROOM_EVENTS + MISC_EVENTS + BOSS_EVENTS
@@ -124,6 +124,8 @@ class Super_Metroid_Autosplitter < Autosplitter
       :"#{@state.room_name}" => changes.room_id,
     }
 
+    room_events.clear if @state.room_name =~ /0x/
+
     misc_events = {
       ceresEscape: @state.room_id == :ceresElevator && @old_state.game_state == :normal_start && @state.game_state == :startOfCeresCutscene,
       rtaFinish: (@state.event_flags & 0x40) > 0 && changes.ship_ai && @state.ship_ai == 0xaa4f,
@@ -148,9 +150,10 @@ class Super_Metroid_Autosplitter < Autosplitter
       phantoonDead: new_bosses.include?(:phantoon),
       draygonDead: new_bosses.include?(:draygon),
       botwoonDead: new_bosses.include?(:botwoon),
-      mb1Dead: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
-      mb2Dead: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
-      mb3Dead: new_bosses.include?(:mother_brain),
+      mb1End: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
+      mb2End: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
+      mb3End: new_bosses.include?(:mother_brain),
+      motherBrainDead: new_bosses.include?(:mother_brain),
     }
 
     boss_events.update(
@@ -171,6 +174,9 @@ class Super_Metroid_Autosplitter < Autosplitter
     # TODO: igtFinish
     # TODO: sporeSpawnRTAFinish
     # TODO: hundredMissileRTAFinish
+
+    invalid_events = events.select { |k,v| !EVENTS.include?(k) }
+    raise "Invalid events: #{invalid_events.inspect}" if not invalid_events.empty?
 
     events.delete_if { |k,v| !v }
 
