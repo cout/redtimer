@@ -93,7 +93,7 @@ class Curses_UI
 
       if @opts.autosplitter_debug then
         debug = @autosplitter.debug
-        @window << debug << "\n" if debug
+        @window << "\n" << debug << "\n" if debug
       end
 
       @timer.start if @autosplitter.should_start
