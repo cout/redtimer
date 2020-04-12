@@ -5,7 +5,6 @@
     "firstSuper",
     "firstPowerBomb",
     "suitUpgrades",
-    "beamUpgrades",
     "bootUpgrades",
     "terminatorETank",
     "morphBall",
@@ -19,6 +18,9 @@
     "mb3",
     "rtaFinish",
     "kraidFight",
-    "charge"
+    "charge",
+    "ice",
+    "wave",
+    "plasma"
   ]
 }
