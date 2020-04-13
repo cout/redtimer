@@ -78,7 +78,7 @@ if __FILE__ == $0 then
   op.on('--autosplitter=SCRIPT') { |a| opts.autosplitter_script = a }
   op.on('--autosplitter-events=EVENTS', Array) { |a| opts.autosplitter_events = a }
   op.on('--autosplitter-debug') { |a| opts.autosplitter_debug = a }
-  op.on('--fps=RATE') { |a| opts.fps = a }
+  op.on('--fps=RATE') { |a| opts.fps = a.to_f }
   op.on('-C', '--config=FILENAME', Array) { |a| opts.config_files = a }
   op.parse!
 
