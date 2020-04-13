@@ -77,7 +77,7 @@ class Curses_Renderer
     end
   end
 
-  def render_segment(name, segment)
+  def render_segment(name, segment, sep=false)
     name = '.' if name == ''
     name = name.force_encoding(Encoding::UTF_8)
     name_width = @width - segment.length * 8
@@ -85,8 +85,12 @@ class Curses_Renderer
     color = segment.current_split? \
       ? semantic_color('CurrentSplit') \
       : semantic_color('Default')
+
     bold = segment.current_split? ? Curses::A_BOLD : 0
-    @window.attron(Curses.color_pair(color) | bold) {
+    standout = sep ? Curses::A_UNDERLINE : 0
+    attrs = bold | standout
+
+    @window.attron(Curses.color_pair(color) | attrs) {
       num_spaces = [ 0, name_width - name.length ].max
       @window << name << ' ' * num_spaces
     }
@@ -97,7 +101,7 @@ class Curses_Renderer
       value = column.value.to_s.force_encoding(Encoding::UTF_8)
       value = '-' if value == ''
       color = column_color(segment, column)
-      @window.attron(Curses.color_pair(color) | bold) {
+      @window.attron(Curses.color_pair(color) | attrs) {
         @window << value.rjust(8)
       }
       x += 8
@@ -108,8 +112,12 @@ class Curses_Renderer
   end
 
   def render_splits(component)
-    component.each_segment do |name, segment|
-      render_segment(name, segment)
+    component.each_segment.each_with_index do |(name, segment), idx|
+      # Underline the next-to-last segment, as a separator.
+      # TODO: I'd prefer this show as the last segment in italics, but I
+      # don't know yet how to display italics in kitty.
+      sep = component.final_separator_shown && idx == component.len - 2
+      render_segment(name, segment, sep)
     end
   end
 
