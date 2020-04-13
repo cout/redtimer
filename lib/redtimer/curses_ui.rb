@@ -15,6 +15,7 @@ class Curses_UI
     @window = Curses::Window.new(0, 0, 1, 2)
     @window.clear
     @window.timeout = 1000.0 / opts.fps
+    @window.keypad = true
 
     @colors = Color_Pairs.new
     @renderer = Curses_Renderer.new(@opts, @window, @colors)
@@ -59,8 +60,8 @@ class Curses_UI
   end
 
   def process_input
-    str = @window.getch.to_s
-    if str != '' then
+    str = @window.getch
+    if str then
       @status = nil
     end
     case str
@@ -73,6 +74,8 @@ class Curses_UI
     when 'S' then save
     when '[' then previous_comparison
     when ']' then next_comparison
+    when 'k', Curses::KEY_UP then @layout.scroll_up
+    when 'j', Curses::KEY_DOWN then @layout.scroll_down
     when '10' then @timer.split
     end
   end
