@@ -5,15 +5,15 @@ module Redtimer
 
 class Curses_Renderer
   COLORS = {
-    'Default'           =>   [   7,  0 ],
-    'AheadGainingTime'  => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
-    'AheadLosingTime'   => [ [ 148,  0 ], [ 149, 0 ], [ 150, 0 ] ],
-    'BehindGainingTime' => [ [ 204,  0 ], [ 205, 0 ], [ 206, 0 ] ],
-    'BehindLosingTime'  => [ [ 196,  0 ], [ 197, 0 ], [ 198, 0 ] ],
-    'BestSegment'       =>   [ 214,  0 ],
-    'NotRunning'        => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
-    'Paused'            => [ [  40,  0 ], [  41, 0 ], [  42, 0 ] ],
-    'PersonalBest'      => [ [  81,  0 ], [  80, 0 ], [  79, 0 ] ],
+    'Default'           =>   [   7, -1 ],
+    'AheadGainingTime'  => [ [  40, -1 ], [  41, -1 ], [  42, -1 ] ],
+    'AheadLosingTime'   => [ [ 148, -1 ], [ 149, -1 ], [ 150, -1 ] ],
+    'BehindGainingTime' => [ [ 204, -1 ], [ 205, -1 ], [ 206, -1 ] ],
+    'BehindLosingTime'  => [ [ 196, -1 ], [ 197, -1 ], [ 198, -1 ] ],
+    'BestSegment'       =>   [ 214, -1 ],
+    'NotRunning'        => [ [  40, -1 ], [  41, -1 ], [  42, -1 ] ],
+    'Paused'            => [ [  40, -1 ], [  41, -1 ], [  42, -1 ] ],
+    'PersonalBest'      => [ [  81, -1 ], [  80, -1 ], [  79, -1 ] ],
     'CurrentSplit'      =>   [   7, 25 ]
   }
 
