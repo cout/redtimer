@@ -14,7 +14,7 @@ class Curses_UI
     @opts = opts
     @window = Curses::Window.new(0, 0, 1, 2)
     @window.clear
-    @window.timeout = 100
+    @window.timeout = 1000.0 / opts.fps
 
     @colors = Color_Pairs.new
     @renderer = Curses_Renderer.new(@opts, @window, @colors)
