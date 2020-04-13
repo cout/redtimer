@@ -64,7 +64,7 @@ end
 if __FILE__ == $0 then
   opts = OpenStruct.new(
     timer_font: 'future',
-    fps: 60)
+    fps: 30)
 
   op = OptionParser.new
   op.on('-L', '--layout=FILENAME') { |a| opts.layout = a }
