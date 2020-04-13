@@ -76,7 +76,7 @@ class Curses_UI
     when ']' then next_comparison
     when 'k', Curses::KEY_UP then @layout.scroll_up
     when 'j', Curses::KEY_DOWN then @layout.scroll_down
-    when '10' then @timer.split
+    when Curses::KEY_CTRL_J, Curses::KEY_ENTER then @timer.split
     end
   end
 
