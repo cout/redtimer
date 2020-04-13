@@ -3,6 +3,7 @@ require_relative 'color_pairs'
 
 require 'LiveSplitCore_ext/LayoutStateRef/each'
 require 'LiveSplitCore_ext/SplitsComponentStateRef/each'
+require 'LiveSplitCore_ext/Timer/Phase'
 
 require 'curses'
 
@@ -14,7 +15,6 @@ class Curses_UI
     @opts = opts
     @window = Curses::Window.new(0, 0, 1, 2)
     @window.clear
-    @window.timeout = 1000.0 / opts.fps
     @window.keypad = true
 
     @colors = Color_Pairs.new
@@ -60,10 +60,22 @@ class Curses_UI
   end
 
   def process_input
+    # If the timer is paused, then we can wait as long as we want.  If
+    # the timer is running, then wait for only one "frame" duration.
+    if @timer.current_phase == LiveSplitCore::Timer::Phase::Running then
+      @window.timeout = 1000.0 / @opts.fps
+    else
+      @window.timeout = 1000
+    end
+
     str = @window.getch
+
+    # If the user pressed a key, clear the status line
     if str then
       @status = nil
     end
+
+    # Process the key that was pressed
     case str
     when ' ' then @timer.toggle_pause_or_start
     when 's' then @timer.skip_split
