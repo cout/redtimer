@@ -10,6 +10,7 @@ class State < OpenStruct
     region2 = MemoryRegion.read_from(sock, 0x0990, 0xef)
     region3 = MemoryRegion.read_from(sock, 0xD800, 0x8f)
     region4 = MemoryRegion.read_from(sock, 0x0F80, 0x4f)
+    region5 = MemoryRegion.read_from(sock, 0x05B0, 0x0f)
 
     room_id = region1.short(0x79B)
     game_state_value = region2.short(0x998)
@@ -25,6 +26,14 @@ class State < OpenStruct
     max_reserve_tanks = region2.short(0x9D6)
 
     igt_frames = region2.short(0x9DA)
+    igt_seconds = region2[0x9DC]
+    igt_minutes = region2[0x9DE]
+    igt_hours = region2[0x9E0]
+    fps = 60.0 # TODO
+
+    # Varia randomizer RTA clock
+    rta_frames = region5.short(0x5B8)
+    rta_rollovers = region5.short(0x5BA)
 
     bosses_bitmask = region3.bignum(0xD828, 7)
 
@@ -86,6 +95,8 @@ class State < OpenStruct
       items_bitmask: items_bitmask,
       event_flags: event_flags,
       ship_ai: ship_ai,
+      igt: igt_hours * 3600 + igt_minutes * 60 + igt_seconds + igt_frames / fps,
+      rta: (rta_frames + (rta_rollovers << 16)) / 60.0,
     )
   end
 
