@@ -80,7 +80,7 @@ class State < OpenStruct
       room_id: room_id,
       room_name: ROOM_IDS[room_id] || ('0x%04x' % room_id),
       game_state_value: game_state_value,
-      game_state: GAME_STATES[game_state_value] || ('%02x' % game_state_value),
+      game_state: GAME_STATES[game_state_value] || ('0x%02x' % game_state_value),
       collected_items_bitmask: collected_items_bitmask,
       collected_items: collected_items,
       collected_beams_bitmask: collected_beams_bitmask,
