@@ -12,7 +12,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     :allAmmoPickups, :firstMissile, :allMissiles, :firstSuper,
     :allSupers, :firstPowerBomb, :allPowerBombs, :suitUpgrades,
     :anyBeamUpgrade, :charge, :spazer, :wave, :ice, :plasma,
-    :anyBootUpgrade, :hiJump, :spaceJump, :speedBooster, :allEnergyUpgrades,
+    :anyBootUpgrade, :highJumpBoots, :spaceJump, :speedBooster, :allEnergyUpgrades,
     :firstETank, :allETanks, :reserveTanks, :morphBall, :bombs,
     :springBall, :screwAttack, :grapple, :xray
   ]
@@ -100,7 +100,7 @@ class Super_Metroid_Autosplitter < Autosplitter
       ice: new_beams.include?(:ice),
       plasma: new_beams.include?(:plasma),
       anyBootUpgrade: new_items.include?(:high_jump_boots) || new_items.include?(:space_jump) || new_items.include?(:speed_booster),
-      hiJump: new_items.include?(:high_jump_boots),
+      highJumpBoots: new_items.include?(:high_jump_boots),
       spaceJump: new_items.include?(:space_jump),
       speedBooster: new_items.include?(:speed_booster),
       allEnergyUpgrades: @state.max_health > @old_state.max_health || @state.max_reserve_tanks > @old_state.max_reserve_tanks,
