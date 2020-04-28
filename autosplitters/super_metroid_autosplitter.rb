@@ -127,8 +127,11 @@ class Super_Metroid_Autosplitter < Autosplitter
     room_events.clear if @state.room_name =~ /0x/
 
     misc_events = {
-      ceresEscape: @state.room_id == :ceresElevator && @old_state.game_state == :normal_start && @state.game_state == :startOfCeresCutscene,
-      rtaFinish: (@state.event_flags & 0x40) > 0 && changes.ship_ai && @state.ship_ai == 0xaa4f,
+      ceresEscape: @state.room_name == :ceresElevator &&
+                   @old_state.game_state == :normalGameplay &&
+                   @state.game_state == :startOfCeresCutscene,
+      rtaFinish: (@state.event_flags & 0x40) > 0 &&
+                 changes.ship_ai && @state.ship_ai == 0xaa4f,
       # TODO: sporeSpawnRTAFinish: in spore spawn room and picked up
       # spore spawn supsers and igt_frames has changed
     }
@@ -209,6 +212,7 @@ class Super_Metroid_Autosplitter < Autosplitter
   def debug
     s = ''
     s << "Room: #{@state.room_name}\n"
+    s << "Game state: #{@state.game_state}\n"
     s << "Items: #{@state.collected_items.inspect}\n"
     s << "Beams: #{@state.collected_beams.inspect}\n"
     s << "Most recent changes: #{@last_changes.to_h}\n"
