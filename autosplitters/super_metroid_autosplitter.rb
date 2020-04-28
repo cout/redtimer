@@ -153,8 +153,8 @@ class Super_Metroid_Autosplitter < Autosplitter
       phantoonDead: new_bosses.include?(:phantoon),
       draygonDead: new_bosses.include?(:draygon),
       botwoonDead: new_bosses.include?(:botwoon),
-      mb1End: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
-      mb2End: @state.room_id == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
+      mb1End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
+      mb2End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
       mb3End: new_bosses.include?(:mother_brain),
       motherBrainDead: new_bosses.include?(:mother_brain),
     }
