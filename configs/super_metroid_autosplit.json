@@ -1,6 +1,7 @@
 {
   "autosplitter_script": "autosplitters/super_metroid_autosplitter.rb",
   "autosplitter_events": [
+    "ceresRidley",
     "firstMissile",
     "firstSuper",
     "firstPowerBomb",
