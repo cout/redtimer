@@ -14,7 +14,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     :anyBeamUpgrade, :charge, :spazer, :wave, :ice, :plasma,
     :anyBootUpgrade, :highJumpBoots, :spaceJump, :speedBooster, :allEnergyUpgrades,
     :firstETank, :allETanks, :reserveTanks, :morphBall, :bombs,
-    :springBall, :screwAttack, :grapple, :xray
+    :springBall, :screwAttack, :grapple, :xray, :varia, :gravity
   ]
 
   # TODO: filter out rooms that don't have these items
@@ -113,6 +113,8 @@ class Super_Metroid_Autosplitter < Autosplitter
       screwAttack: new_items.include?(:screw_attack),
       grapple: new_items.include?(:grapple),
       xray: new_items.include?(:xray),
+      varia: new_items.include?(:varia),
+      gravity: new_items.include?(:gravity),
     }
 
     room_events = {
