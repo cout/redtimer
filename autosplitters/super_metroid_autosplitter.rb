@@ -34,13 +34,21 @@ class Super_Metroid_Autosplitter < Autosplitter
     :rtaFinish,
   ]
 
+  MINI_BOSSES = [
+    "bombTorizo", "sporeSpawn", "crocomire", "botwoon", "goldenTorizo"
+  ]
+
+  BOSSES = [
+    "kraid", "phantoon", "ridley", "draygon", "motherBrain"
+  ]
+
   BOSS_EVENTS = [
-    :bombTorizoFight, :sporeSpawnFight, :crocomireFight, :botwoonFight,
-    :kraidFight, :phantoonFight, :draygonFight, :ridleyFight,
-    :bombTorizoDead, :sporeSpawnDead, :crocomireDead, :botwoonDead,
-    :kraidDead, :phantoonDead, :draygonDead, :ridleyDead,
+    *MINI_BOSSES.map { |name| :"#{name}Fight" },
+    *MINI_BOSSES.map { |name| :"#{name}Dead" },
+    *BOSSES.map { |name| :"#{name}Fight" },
+    *BOSSES.map { |name| :"#{name}Dead" },
     :anyMinibossFight, :anyMinibossDead, :anyBossFight, :anyBossDead,
-    :mb1End, :mb2End, :mb3End, :motherBrainDead
+    :mb1End, :mb2End, :mb3End,
   ]
 
   EVENTS = UPGRADE_EVENTS + ROOM_EVENTS + MISC_EVENTS + BOSS_EVENTS
@@ -140,12 +148,13 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     boss_events = {
       bombTorizoFight: @old_state.room_name != :bombTorizoRoom && @state.room_name == :bombTorizoRoom && !@state.bosses.include?(:bomb_torizo),
-      sporeSpawnFight: @old_state.room_name != :sporeSpawnRoom && @state.room_name == :sporeSpawnRoom && !@state.bosses.include?(:bomb_torizo),
+      sporeSpawnFight: @old_state.room_name != :sporeSpawnRoom && @state.room_name == :sporeSpawnRoom && !@state.bosses.include?(:spore_spawn),
       kraidFight: @old_state.room_name != :kraidRoom && @state.room_name == :kraidRoom && !@state.bosses.include?(:kraid),
       phantoonFight: @old_state.room_name != :phantoonRoom && @state.room_name == :phantoonRoom && !@state.bosses.include?(:phantoon),
       botwoonFight: @old_state.room_name != :botwoonRoom && @state.room_name == :botwoonRoom && !@state.bosses.include?(:botwoon),
       draygonFight: @old_state.room_name != :draygonRoom && @state.room_name == :draygonRoom && !@state.bosses.include?(:draygon),
       crocomireFight: @old_state.room_name != :crocomireRoom && @state.room_name == :crocomireRoom && !@state.bosses.include?(:crocomire),
+      goldenTorizoFight: @old_state.room_name != :goldenTorizo && @state.room_name == :goldenTorizo && !@state.bosses.include?(:goldenTorizo),
       ridleyFight: @old_state.room_name != :ridleyRoom && @state.room_name == :ridleyRoom && !@state.bosses.include?(:ridley),
 
       bombTorizoDead: new_bosses.include?(:bomb_torizo),
@@ -155,6 +164,7 @@ class Super_Metroid_Autosplitter < Autosplitter
       phantoonDead: new_bosses.include?(:phantoon),
       draygonDead: new_bosses.include?(:draygon),
       botwoonDead: new_bosses.include?(:botwoon),
+      goldenTorizoDead: new_bosses.include?(:goldenTorizo),
       mb1End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
       mb2End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
       mb3End: new_bosses.include?(:mother_brain),

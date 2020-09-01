@@ -65,16 +65,17 @@ class State < OpenStruct
     collected_beams << :spazer          if collected_beams_bitmask & 0x0004 != 0
     collected_beams << :plasma          if collected_beams_bitmask & 0x0008 != 0
 
-    bosses = [ ]
-    bosses << :bomb_torizo              if bosses_bitmask & 0x00000000004 != 0
-    bosses << :kraid                    if bosses_bitmask & 0x00000000100 != 0
-    bosses << :spore_spawn              if bosses_bitmask & 0x00000000200 != 0
-    bosses << :ridley                   if bosses_bitmask & 0x00000010000 != 0
-    bosses << :crocomire                if bosses_bitmask & 0x00000020000 != 0
-    bosses << :phantoon                 if bosses_bitmask & 0x00001000000 != 0
-    bosses << :draygon                  if bosses_bitmask & 0x00100000000 != 0
-    bosses << :botwoon                  if bosses_bitmask & 0x00200000000 != 0
-    bosses << :mother_brain             if bosses_bitmask & 0x20000000000 != 0
+    bosses = [ ] #                                            TTMMWWNNBBCC
+    bosses << :bomb_torizo              if bosses_bitmask & 0x000000000004 != 0
+    bosses << :kraid                    if bosses_bitmask & 0x000000000100 != 0
+    bosses << :spore_spawn              if bosses_bitmask & 0x000000000200 != 0
+    bosses << :ridley                   if bosses_bitmask & 0x000000010000 != 0
+    bosses << :crocomire                if bosses_bitmask & 0x000000020000 != 0
+    bosses << :goldenTorizo             if bosses_bitmask & 0x000000040000 != 0
+    bosses << :phantoon                 if bosses_bitmask & 0x000001000000 != 0
+    bosses << :draygon                  if bosses_bitmask & 0x000100000000 != 0
+    bosses << :botwoon                  if bosses_bitmask & 0x000200000000 != 0
+    bosses << :mother_brain             if bosses_bitmask & 0x020000000000 != 0
 
     return self.new(
       room_id: room_id,
