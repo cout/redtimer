@@ -227,6 +227,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     s << "Game state: #{@state.game_state}\n"
     s << "Items: #{@state.collected_items.inspect}\n"
     s << "Beams: #{@state.collected_beams.inspect}\n"
+    s << "Tanks: #{@state.max_health} Reserve: #{@state.max_reserve_tanks}\n"
     s << "Most recent changes: #{@last_changes.to_h}\n"
     s << "Most recent events: #{@last_events}\n"
     s << "\n"
