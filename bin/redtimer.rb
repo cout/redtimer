@@ -103,7 +103,7 @@ if __FILE__ == $0 then
   if autosplitter and opts.autosplitter_events then
     events = opts.autosplitter_events.map(&:to_sym)
     events.each do |e|
-      raise "Unknown event #{e}" if not autosplitter.class::EVENTS.include?(e)
+      raise "Unknown event #{e}" if not autosplitter.valid_event?(e)
     end
     autosplitter.split_events.merge(events)
   end

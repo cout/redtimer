@@ -17,8 +17,16 @@ class Super_Metroid_Autosplitter < Autosplitter
     :springBall, :screwAttack, :grapple, :xray, :varia, :gravity
   ]
 
+  ROOM_NAMES = Set.new(ROOM_IDS.values.map { |name| name.to_s })
+
+  CAPITALIZED_ROOM_NAMES = Set.new(ROOM_NAMES.map { |name|
+    name.sub(/./, &:upcase)
+  })
+
+  VALID_ROOM_IDS_RE = /(0x[A-Fa-f0-9]+|#{(ROOM_NAMES + CAPITALIZED_ROOM_NAMES).to_a.join('|')})/
+
   # TODO: filter out rooms that don't have these items
-  ROOM_EVENTS = Set.new(ROOM_IDS.values.map { |room_name|
+  ROOM_EVENTS = Set.new(ROOM_NAMES.map { |room_name|
     [
       :"#{room_name}",
       :"#{room_name}Missiles",
@@ -132,6 +140,7 @@ class Super_Metroid_Autosplitter < Autosplitter
       :"#{@state.room_name}ETank" => @state.max_health > @old_state.max_health,
       :"#{@state.room_name}Reserve" => @state.max_reserve_tanks > @old_state.max_reserve_tanks,
       :"#{@state.room_name}" => changes.room_id,
+      :"#{@old_state.room_name}To#{@state.room_name.to_s.sub(/./, &:upcase)}" => changes.room_id,
     }
 
     room_events.clear if @state.room_name =~ /0x/
@@ -156,6 +165,7 @@ class Super_Metroid_Autosplitter < Autosplitter
       crocomireFight: @old_state.room_name != :crocomireRoom && @state.room_name == :crocomireRoom && !@state.bosses.include?(:crocomire),
       goldenTorizoFight: @old_state.room_name != :goldenTorizo && @state.room_name == :goldenTorizo && !@state.bosses.include?(:goldenTorizo),
       ridleyFight: @old_state.room_name != :ridleyRoom && @state.room_name == :ridleyRoom && !@state.bosses.include?(:ridley),
+      motherBrainFight: @old_state.room_name != :motherBrain && @state.room_name == :motherBrain && !@state.bosses.include?(:motherBrain),
 
       bombTorizoDead: new_bosses.include?(:bomb_torizo),
       sporeSpawnDead: new_bosses.include?(:spore_spawn),
@@ -173,9 +183,9 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     boss_events.update(
       anyMinibossFight: boss_events[:bombTorizoFight] || boss_events[:sporeSpawnFight] || boss_events[:crocomireFight] || boss_events[:botwoonFight],
-      anyBossFight: boss_events[:ridleyFight] || boss_events[:kraidFight] || boss_events[:phantoonFight] || boss_events[:draygonFight],
+      anyBossFight: boss_events[:ridleyFight] || boss_events[:kraidFight] || boss_events[:phantoonFight] || boss_events[:draygonFight] || boss_events[:motherBrainFight],
       anyMinibossDead: boss_events[:bombTorizoDead] || boss_events[:sporeSpawnDead] || boss_events[:crocomireDead] || boss_events[:botwoonDead],
-      anyBossDead: boss_events[:ridleyDead] || boss_events[:kraidDead] || boss_events[:phantoonDead] || boss_events[:draygonDead],
+      anyBossDead: boss_events[:ridleyDead] || boss_events[:kraidDead] || boss_events[:phantoonDead] || boss_events[:draygonDead] || boss_events[:motherBrainDead],
     )
 
     events = { }
@@ -190,16 +200,12 @@ class Super_Metroid_Autosplitter < Autosplitter
     # TODO: sporeSpawnRTAFinish
     # TODO: hundredMissileRTAFinish
 
-    invalid_events = events.select { |k,v| !EVENTS.include?(k) }
-    raise "Invalid events: #{invalid_events.inspect}" if not invalid_events.empty?
-
     events.delete_if { |k,v| !v }
 
+    invalid_events = events.keys.select { |event| !valid_event?(event) }
+    raise "Invalid events: #{invalid_events.inspect}" if not invalid_events.empty?
+
     event_names = events.keys
-    event_names.each { |name|
-      # TODO: 56664Missiles not valid
-      # raise "Invalid event: #{name}" if not EVENTS.include?(name)
-    }
 
     if event_names.size > 0 then
       @last_events = event_names
@@ -239,5 +245,19 @@ class Super_Metroid_Autosplitter < Autosplitter
     recent_splits = @splits.slice(-([@splits.size, 10].min)..-1)
     @splits.each { |split| s << "  #{split}\n" }
     return s
+  end
+
+  def valid_event?(event)
+    EVENTS.include?(event) || valid_transition_event?(event)
+  end
+
+  def valid_transition_event?(event)
+    event =~ /^#{VALID_ROOM_IDS_RE}To#{VALID_ROOM_IDS_RE}$/
+  end
+
+  def valid_room?(name)
+    ROOM_NAMES.include?(name) ||
+    CAPITALIZED_ROOM_NAMES.include?(name) ||
+    name =~ /0x[A-Fa-f0-9]+/
   end
 end
