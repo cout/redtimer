@@ -73,6 +73,7 @@ ROOM_IDS = {
   0xAE32 => :volcano,
   0xAE74 => :kronicBoost,
   0xAEB4 => :magdolliteTunnel,
+  0xAF14 => :lavaDive,
   0xAF3F => :lowerNorfairElevator,
   0xAFA3 => :risingTide,
   0xAFFB => :spikyAcidSnakes,
