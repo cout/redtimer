@@ -84,8 +84,8 @@ class Curses_UI
     when 'r' then reset
     when 'q' then quit
     when 'S' then save
-    when '[' then previous_comparison
-    when ']' then next_comparison
+    when '[', Curses::KEY_LEFT then previous_comparison
+    when ']', Curses::KEY_RIGHT, Curses::KEY_CTRL_I then next_comparison
     when 'k', Curses::KEY_UP then @layout.scroll_up
     when 'j', Curses::KEY_DOWN then @layout.scroll_down
     when Curses::KEY_CTRL_J, Curses::KEY_ENTER then @timer.split
