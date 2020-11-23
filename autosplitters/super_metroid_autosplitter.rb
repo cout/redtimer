@@ -73,8 +73,16 @@ class Super_Metroid_Autosplitter < Autosplitter
 
   def update
     @old_state = @state
-    @state = State.read_from(@sock)
-    update_events
+    state = State.read_from(@sock)
+    if playing?(state) then
+      @state = state
+      update_events
+    end
+  end
+
+  def playing?(state)
+    s = state.game_state_value
+    s >= GAME_STATE_NAMES[:normalGameplay] && s <= GAME_STATE_NAMES[:endCutscene]
   end
 
   def should_start
@@ -229,11 +237,13 @@ class Super_Metroid_Autosplitter < Autosplitter
 
   def debug
     s = ''
-    s << "Room: #{@state.room_name}\n"
-    s << "Game state: #{@state.game_state}\n"
-    s << "Items: #{@state.collected_items.inspect}\n"
-    s << "Beams: #{@state.collected_beams.inspect}\n"
-    s << "Tanks: #{@state.max_health} Reserve: #{@state.max_reserve_tanks}\n"
+    if @state then
+      s << "Room: #{@state.room_name}\n"
+      s << "Game state: #{@state.game_state}\n"
+      s << "Items: #{@state.collected_items.inspect}\n"
+      s << "Beams: #{@state.collected_beams.inspect}\n"
+      s << "Tanks: #{@state.max_health} Reserve: #{@state.max_reserve_tanks}\n"
+    end
     s << "Most recent changes: #{@last_changes.to_h}\n"
     s << "Most recent events: #{@last_events}\n"
     s << "\n"
