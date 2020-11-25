@@ -73,11 +73,16 @@ class Super_Metroid_Autosplitter < Autosplitter
 
   def update
     @old_state = @state
-    state = State.read_from(@sock)
-    if playing?(state) then
-      @state = state
-      update_events
+    new_state = State.read_from(@sock)
+    if playing?(new_state) or not @old_state then
+      state = new_state
+    else
+      state = State.new(@old_state.to_h)
+      state.game_state_value = new_state.game_state_value
+      state.game_state = new_state.game_state
     end
+    @state = state
+    update_events
   end
 
   def playing?(state)
