@@ -81,19 +81,22 @@ class Super_Metroid_Autosplitter < Autosplitter
   end
 
   def playing?(state)
-    s = state.game_state_value
-    s >= GAME_STATE_NAMES[:normalGameplay] && s <= GAME_STATE_NAMES[:endCutscene]
+    s = state.game_state
+    s >= GameState::NormalGameplay && s <= GameState::EndCutscene
   end
 
   def should_start
     return false if !@state || !@old_state
 
-    old = @old_state.game_state_value
-    new = @state.game_state_value
+    old = @old_state.game_state
+    new = @state.game_state
+    transition = [ old, new ]
 
-    normal_start = old == 2 && new == 0x1f
-    cutscene_ended = old == 0x1e && new == 0x1f
-    zebes_start = old == 5 && new == 6
+    @log << "state transition: " << transition if old != new
+
+    normal_start = transition == [ GameState::OptionMode, GameState::GameStarting ]
+    cutscene_ended = transition == [ GameState::CutsceneEnding, GameState::GameStarting ]
+    zebes_start = transition == [ GameState::LoadArea, GameState::Loading ]
 
     return normal_start || cutscene_ended || zebes_start
   end
@@ -155,8 +158,8 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     misc_events = {
       ceresEscape: @state.room_name == :ceresElevator &&
-                   @old_state.game_state == :normalGameplay &&
-                   @state.game_state == :startOfCeresCutscene,
+                   @old_state.game_state == GameState::NormalGameplay &&
+                   @state.game_state == GameState::StartOfCeresCutscene,
       rtaFinish: (@state.event_flags & 0x40) > 0 &&
                  changes.ship_ai && @state.ship_ai == 0xaa4f,
       # TODO: sporeSpawnRTAFinish: in spore spawn room and picked up
@@ -183,8 +186,8 @@ class Super_Metroid_Autosplitter < Autosplitter
       draygonDead: new_bosses.include?(:draygon),
       botwoonDead: new_bosses.include?(:botwoon),
       goldenTorizoDead: new_bosses.include?(:goldenTorizo),
-      mb1End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
-      mb2End: @state.room_name == :motherBrain && @state.game_state == :normalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
+      mb1End: @state.room_name == :motherBrain && @state.game_state == GameState::NormalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 18000,
+      mb2End: @state.room_name == :motherBrain && @state.game_state == GameState::NormalGameplay && @old_state.mother_brain_hp == 0 && @old_state.mother_brain_hp == 36000,
       mb3End: new_bosses.include?(:mother_brain),
       motherBrainDead: new_bosses.include?(:mother_brain),
     }
