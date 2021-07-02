@@ -40,6 +40,7 @@ class Super_Metroid_Autosplitter < Autosplitter
   MISC_EVENTS = [
     :ceresEscape,
     :rtaFinish,
+    :hundredMissileRTAFinish,
   ]
 
   MINI_BOSSES = [
@@ -167,6 +168,7 @@ class Super_Metroid_Autosplitter < Autosplitter
                    @state.game_state == GameState::StartOfCeresCutscene,
       rtaFinish: (@state.event_flags & 0x40) > 0 &&
                  changes.ship_ai && @state.ship_ai == 0xaa4f,
+      hundredMissileRTAFinish: @old_state.max_missiles < 100 && @state.max_missiles >= 100,
       # TODO: sporeSpawnRTAFinish: in spore spawn room and picked up
       # spore spawn supsers and igt_frames has changed
     }
