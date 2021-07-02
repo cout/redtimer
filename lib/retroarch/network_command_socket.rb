@@ -15,8 +15,13 @@ class NetworkCommandSocket
   def read_core_ram(addr, size)
     begin
       @sock.sendmsg("READ_CORE_RAM %x %d\n" % [ addr, size ])
-      s, addrinfo, rflags, *controls = @sock.recvmsg
-      return s.split[2..-1].map { |value| value.hex }
+      res = IO.select([@sock], nil, nil, 1)
+      if res
+        s, addrinfo, rflags, *controls = @sock.recvmsg
+        return s.split[2..-1].map { |value| value.hex }
+      else
+        return nil
+      end
     rescue Errno::ECONNREFUSED
       return nil
     end
