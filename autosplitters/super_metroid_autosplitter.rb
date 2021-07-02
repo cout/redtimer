@@ -200,9 +200,9 @@ class Super_Metroid_Autosplitter < Autosplitter
     }
 
     boss_events.update(
-      anyMinibossFight: boss_events[:bombTorizoFight] || boss_events[:sporeSpawnFight] || boss_events[:crocomireFight] || boss_events[:botwoonFight],
+      anyMinibossFight: boss_events[:bombTorizoFight] || boss_events[:sporeSpawnFight] || boss_events[:crocomireFight] || boss_events[:botwoonFight] || boss_events[:goldenTorizoFight],
       anyBossFight: boss_events[:ridleyFight] || boss_events[:kraidFight] || boss_events[:phantoonFight] || boss_events[:draygonFight] || boss_events[:motherBrainFight],
-      anyMinibossDead: boss_events[:bombTorizoDead] || boss_events[:sporeSpawnDead] || boss_events[:crocomireDead] || boss_events[:botwoonDead],
+      anyMinibossDead: boss_events[:bombTorizoDead] || boss_events[:sporeSpawnDead] || boss_events[:crocomireDead] || boss_events[:botwoonDead] || boss_events[:goldenTorizoDead],
       anyBossDead: boss_events[:ridleyDead] || boss_events[:kraidDead] || boss_events[:phantoonDead] || boss_events[:draygonDead] || boss_events[:motherBrainDead],
     )
 
