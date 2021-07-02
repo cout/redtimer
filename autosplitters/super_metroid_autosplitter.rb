@@ -150,6 +150,11 @@ class Super_Metroid_Autosplitter < Autosplitter
       gravity: new_items.include?(:gravity),
     }
 
+    # Exclude upgrades that were acquired as a result of GT code
+    if @state.room_name == 'goldenTorizo' then
+      upgrade_events = upgrade_events.map { |name, value| [ name, false ] }.to_h
+    end
+
     room_events = {
       :"#{@state.room_name}Missiles" => @state.max_missiles > @old_state.max_missiles,
       :"#{@state.room_name}Supers" => @state.max_supers > @old_state.max_supers,
