@@ -151,7 +151,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     }
 
     # Exclude upgrades that were acquired as a result of GT code
-    if @state.room_name == 'goldenTorizo' then
+    if @state.room_name == :goldenTorizo or @state.room_name == :screwAttackRoom then
       upgrade_events = upgrade_events.map { |name, value| [ name, false ] }.to_h
     end
 
