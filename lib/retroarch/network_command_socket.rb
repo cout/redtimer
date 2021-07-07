@@ -35,7 +35,7 @@ class NetworkCommandSocket
   def read_core_ram(addr, size)
     response = send_command("READ_CORE_RAM %x %d\n" % [ addr, size ])
     if response then
-      return response.split.map { |value| value.hex }
+      return response.split[1..-1].map { |value| value.hex }
     else
       return nil
     end
