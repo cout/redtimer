@@ -47,7 +47,7 @@ class NetworkCommandSocket
     response = send_command("GET_STATUS")
     if response then
       state, content = response.split
-      return Status.new(state, content.split(','))
+      return Status.new(state, content ? content.split(',') : nil)
     else
       return nil
     end
