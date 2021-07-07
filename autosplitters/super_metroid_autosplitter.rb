@@ -70,9 +70,13 @@ class Super_Metroid_Autosplitter < Autosplitter
     @old_state = nil
     @log = [ ]
     @splits = [ ]
+    @emulator_paused = nil
   end
 
   def update
+    @emulator_status = @sock.get_status
+    @emulator_paused = @sock.paused?
+
     @old_state = @state
     new_state = State.read_from(@sock)
     if playing?(new_state) or not @old_state then
@@ -105,6 +109,14 @@ class Super_Metroid_Autosplitter < Autosplitter
     zebes_start = transition == [ GameState::LoadArea, GameState::Loading ]
 
     return normal_start || cutscene_ended || zebes_start
+  end
+
+  def should_pause
+    return @emulator_paused
+  end
+
+  def should_resume
+    return !@emulator_paused
   end
 
   def update_events
@@ -253,6 +265,8 @@ class Super_Metroid_Autosplitter < Autosplitter
   def debug
     s = ''
     if @state then
+      s << "Emulator status: #{@emulator_status}\n"
+      s << "Emulator paused: #{@emulator_paused}\n"
       s << "Room: #{@state.room_name}\n"
       s << "Game state: #{@state.game_state}\n"
       s << "Items: #{@state.collected_items.inspect}\n"

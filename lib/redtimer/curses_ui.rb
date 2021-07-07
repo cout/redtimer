@@ -25,6 +25,7 @@ class Curses_UI
     @timer = timer
     @autosplitter = autosplitter
     @status = nil
+    @paused_due_to_emulator = false
   end
 
   def self.run(*args, **kwargs)
@@ -106,6 +107,16 @@ class Curses_UI
     @status = "Comparing against #{@timer.current_comparison}"
   end
 
+  def emulator_pause
+    @timer.pause
+    @paused_due_to_emulator = true
+  end
+
+  def emulator_resume
+    @timer.resume if @paused_due_to_emulator
+    @paused_due_to_emulator = false
+  end
+
   def autosplit
     if @autosplitter then
       @autosplitter.update
@@ -118,6 +129,8 @@ class Curses_UI
       @timer.start if @autosplitter.should_start
       @timer.split if @autosplitter.should_split
       @timer.reset if @autosplitter.should_reset
+      @timer.pause if @autosplitter.should_pause
+      @timer.resume if @autosplitter.should_resume
 
       # TODO: do something with is_loading?
       # TODO: update game_time

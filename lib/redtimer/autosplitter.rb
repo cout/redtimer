@@ -46,6 +46,14 @@ class Autosplitter
     false
   end
 
+  def should_pause
+    false
+  end
+
+  def should_unpause
+    false
+  end
+
   def game_time
     return Float::NAN
   end
