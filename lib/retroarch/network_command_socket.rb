@@ -5,7 +5,7 @@ module Retroarch
 class NetworkCommandSocket
   attr_reader :sock
 
-  def initialize(port=55354, addr='127.0.0.1', alt_port=55355)
+  def initialize(port=55355, addr='127.0.0.1', alt_port=55354)
     connect(port, addr, alt_port)
   end
 
