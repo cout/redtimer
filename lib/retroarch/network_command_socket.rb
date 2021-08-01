@@ -5,9 +5,22 @@ module Retroarch
 class NetworkCommandSocket
   attr_reader :sock
 
-  def initialize(port=55354, addr='127.0.0.1')
-    @sock = UDPSocket.new
-    @sock.connect(addr, port)
+  def initialize(port=55354, addr='127.0.0.1', alt_port=55355)
+    connect(port, addr, alt_port)
+  end
+
+  def connect(port, addr, alt_port)
+    connected = false
+
+    loop do
+      @sock = UDPSocket.new
+      @sock.connect(addr, port)
+      break if get_status
+
+      puts "Did not connect; trying again on port #{alt_port}"
+      port, alt_port = alt_port, port
+      sleep 1
+    end
   end
 
   def send_command(msg)
