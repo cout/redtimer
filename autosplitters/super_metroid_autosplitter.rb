@@ -72,6 +72,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     @log = [ ]
     @splits = [ ]
     @emulator_paused = nil
+    @previously_did_spore_spawn_rta_finish = false
   end
 
   def update
@@ -180,7 +181,10 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     room_events.clear if @state.room_name =~ /0x/
 
-    collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
+    did_have_spore_spawn_super = (@old_state.items_bitmask & (1<<14)) != 0
+    have_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
+    did_spore_spawn_rta_finish = @state.room_name == :sporeSpawnSuper && have_spore_spawn_super && @state.igt > @old_state.igt
+    just_did_spore_spawn_rta_finish = did_spore_spawn_rta_finish && !@previously_did_spore_spawn_rta_finish
 
     misc_events = {
       ceresEscape: @state.room_name == :ceresElevator &&
@@ -189,8 +193,10 @@ class Super_Metroid_Autosplitter < Autosplitter
       rtaFinish: (@state.event_flags & 0x40) > 0 &&
                  changes.ship_ai && @state.ship_ai == 0xaa4f,
       hundredMissileRTAFinish: @old_state.max_missiles < 100 && @state.max_missiles >= 100,
-      sporeSpawnRTAFinish: @state.room_name == :sporeSpawnSuper && collected_spore_spawn_super && @state.igt != @old_state.igt
+      sporeSpawnRTAFinish: just_did_spore_spawn_rta_finish
     }
+
+    @previously_did_spore_spawn_rta_finish = did_spore_spawn_rta_finish
 
     boss_events = {
       bombTorizoFight: @old_state.room_name != :bombTorizoRoom && @state.room_name == :bombTorizoRoom && !@state.bosses.include?(:bomb_torizo),
@@ -232,10 +238,6 @@ class Super_Metroid_Autosplitter < Autosplitter
     events.update(boss_events)
 
     # TODO: area transitions
-    # TODO: rtaFinish
-    # TODO: igtFinish
-    # TODO: sporeSpawnRTAFinish
-    # TODO: hundredMissileRTAFinish
 
     events.delete_if { |k,v| !v }
 
@@ -268,6 +270,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     s = ''
     if @state then
       collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
+      s << "Collected spore spawn super time: #{@collected_spore_spawn_super_igt}\n"
       s << "Emulator status: #{@emulator_status}\n"
       s << "Emulator paused: #{@emulator_paused}\n"
       s << "Room: #{@state.room_name}\n"
