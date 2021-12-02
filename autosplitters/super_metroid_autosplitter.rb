@@ -41,6 +41,7 @@ class Super_Metroid_Autosplitter < Autosplitter
     :ceresEscape,
     :rtaFinish,
     :hundredMissileRTAFinish,
+    :sporeSpawnRTAFinish,
   ]
 
   MINI_BOSSES = [
@@ -179,6 +180,8 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     room_events.clear if @state.room_name =~ /0x/
 
+    collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
+
     misc_events = {
       ceresEscape: @state.room_name == :ceresElevator &&
                    @old_state.game_state == GameState::NormalGameplay &&
@@ -186,8 +189,7 @@ class Super_Metroid_Autosplitter < Autosplitter
       rtaFinish: (@state.event_flags & 0x40) > 0 &&
                  changes.ship_ai && @state.ship_ai == 0xaa4f,
       hundredMissileRTAFinish: @old_state.max_missiles < 100 && @state.max_missiles >= 100,
-      # TODO: sporeSpawnRTAFinish: in spore spawn room and picked up
-      # spore spawn supsers and igt_frames has changed
+      sporeSpawnRTAFinish: @state.room_name == :sporeSpawnSuper && collected_spore_spawn_super && @state.igt != @old_state.igt
     }
 
     boss_events = {
@@ -265,6 +267,7 @@ class Super_Metroid_Autosplitter < Autosplitter
   def debug
     s = ''
     if @state then
+      collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
       s << "Emulator status: #{@emulator_status}\n"
       s << "Emulator paused: #{@emulator_paused}\n"
       s << "Room: #{@state.room_name}\n"
