@@ -129,8 +129,8 @@ class Curses_UI
       @timer.start if @autosplitter.should_start
       @timer.split if @autosplitter.should_split
       @timer.reset if @autosplitter.should_reset
-      @timer.pause if @autosplitter.should_pause
-      @timer.resume if @autosplitter.should_resume
+      emulator_pause if @autosplitter.should_pause
+      emulator_resume if @autosplitter.should_resume
 
       # TODO: do something with is_loading?
       # TODO: update game_time
