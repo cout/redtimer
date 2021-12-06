@@ -183,8 +183,8 @@ class Super_Metroid_Autosplitter < Autosplitter
 
     did_have_spore_spawn_super = (@old_state.items_bitmask & (1<<14)) != 0
     have_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
-    did_spore_spawn_rta_finish = @state.room_name == :sporeSpawnSuper && have_spore_spawn_super && @state.igt > @old_state.igt
-    just_did_spore_spawn_rta_finish = did_spore_spawn_rta_finish && !@previously_did_spore_spawn_rta_finish
+    did_spore_spawn_rta_finish = (@state.room_name == :sporeSpawnSuper && did_have_spore_spawn_super && @state.igt > @old_state.igt)
+    just_did_spore_spawn_rta_finish = (did_spore_spawn_rta_finish && !@previously_did_spore_spawn_rta_finish)
 
     misc_events = {
       ceresEscape: @state.room_name == :ceresElevator &&
@@ -269,7 +269,6 @@ class Super_Metroid_Autosplitter < Autosplitter
   def debug
     s = ''
     if @state then
-      collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
       s << "Emulator paused: #{@emulator_paused}\n"
       s << "Room: #{@state.room_name}\n"
       s << "Game state: #{@state.game_state}\n"
