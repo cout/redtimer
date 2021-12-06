@@ -270,8 +270,6 @@ class Super_Metroid_Autosplitter < Autosplitter
     s = ''
     if @state then
       collected_spore_spawn_super = (@state.items_bitmask & (1<<14)) != 0
-      s << "Collected spore spawn super time: #{@collected_spore_spawn_super_igt}\n"
-      s << "Emulator status: #{@emulator_status}\n"
       s << "Emulator paused: #{@emulator_paused}\n"
       s << "Room: #{@state.room_name}\n"
       s << "Game state: #{@state.game_state}\n"
