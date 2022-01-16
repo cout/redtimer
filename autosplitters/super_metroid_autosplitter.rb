@@ -165,8 +165,14 @@ class Super_Metroid_Autosplitter < Autosplitter
     }
 
     # Exclude upgrades that were acquired as a result of GT code
+    # TODO: This means that allAmmoPickups won't work for GT missiles or
+    # supers, which might break 100%.
     if @state.room_name == :goldenTorizo or @state.room_name == :screwAttackRoom then
+      old_upgrade_events = upgrade_events
       upgrade_events = upgrade_events.map { |name, value| [ name, false ] }.to_h
+
+      # Screw attack is not acquired with GT code
+      upgrade_events[:screwAttack] = old_upgrade_events[:screwAttack]
     end
 
     room_events = {
