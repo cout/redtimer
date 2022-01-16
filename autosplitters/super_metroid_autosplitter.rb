@@ -231,6 +231,12 @@ class Super_Metroid_Autosplitter < Autosplitter
       anyBossDead: boss_events[:ridleyDead] || boss_events[:kraidDead] || boss_events[:phantoonDead] || boss_events[:draygonDead] || boss_events[:motherBrainDead],
     )
 
+    event_keys = upgrade_events.keys + room_events.keys + misc_events.keys + boss_events.keys
+    if event_keys.size != event_keys.uniq.size then
+      duplicate_event_keys = event_keys.map { |k| [ k, event_keys.count(k) ] }.select { |k, c| c > 1 }.map { |k, c| k }.uniq
+      # raise "Duplicated events: #{duplicate_event_keys}"
+    end
+
     events = { }
     events.update(upgrade_events)
     events.update(room_events)
